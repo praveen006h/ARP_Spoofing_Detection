@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARP Spoofing</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Enter IP Addresses for ARP Spoofing</h1>
+    
+    {% if message %}
+        <p >{{ message }}</p>
+    {% endif %}
+    
+    <form action="/start_spoof" method="POST">
+        <label for="victim_ip">Enter Victim IP:</label>
+        <input type="text" id="victim_ip" name="victim_ip" required><br><br>
+        
+        <label for="gateway_ip">Enter Gateway IP:</label>
+        <input type="text" id="gateway_ip" name="gateway_ip" required><br><br>
+        
+        <input type="submit" value="Start Spoofing">
+    </form>
+    
+    <form action="/stop_spoof" method="POST" style="margin-top:20px;">
+        <input type="submit" value="Stop Spoofing">
+    </form>
+</body>
+</html>

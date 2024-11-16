@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARP Spoofing and Packet Capture</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        #packet-display {
+            max-height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter IP Addresses for ARP Spoofing</h1>
+    
+    {% if message %}
+        <p style="color:green;">{{ message }}</p>
+    {% endif %}
+    
+    <form action="/start_spoof" method="POST">
+        <label for="victim_ip">Enter Victim IP:</label>
+        <input type="text" id="victim_ip" name="victim_ip" required><br><br>
+        
+        <label for="gateway_ip">Enter Gateway IP:</label>
+        <input type="text" id="gateway_ip" name="gateway_ip" required><br><br>
+        
+        <input type="submit" value="Start Spoofing">
+    </form>
+    
+    <form action="/stop_spoof" method="POST" style="margin-top:20px;">
+        <input type="submit" value="Stop Spoofing">
+    </form>
+
+    <h2>Captured HTTP Packets</h2>
+    <div id="packet-display">
+        <!-- Captured packets will be displayed here -->
+    </div>
+
+    <script>
+        const socket = io();
+
+        // Listen for packet data from the server
+        socket.on('packet_data', (data) => {
+            const packetDisplay = document.getElementById('packet-display');
+            const packetInfo = `<p><strong>URL:</strong> ${data.url}<br>
+                                <strong>Method:</strong> ${data.method}<br>
+                                <strong>Form Data:</strong> ${data.form_data}</p><hr>`;
+            
+            // Append new packet information
+            packetDisplay.innerHTML += packetInfo;
+            packetDisplay.scrollTop = packetDisplay.scrollHeight;  // Auto-scroll
+        });
+    </script>
+</body>
+</html>
